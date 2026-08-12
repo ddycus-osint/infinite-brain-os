@@ -66,6 +66,16 @@ real object. Use `assets/` when a surface or department needs to store or point 
 file without committing it to git. See `_system/asset-registry-rules.md` and
 `knowledge/ai-architecture/decisions/asset-reference-model.md`.
 
+### The surface registry: `_system/surface-registry/`
+
+One file per connected surface (Cowork, Obsidian, and so on), each declaring the nine-item
+contract: truth sources read, owned runtime state, disallowed ownership, write paths, promotion
+gates, identity and auth boundary, agent-runtime binding, observability, and self-host posture.
+Use this registry when a render-plane surface reads or writes this repo's working tree, so what
+it is allowed to touch and through which gate is explicit rather than assumed. See
+`_system/surface-contract-rules.md` for the full contract and `_system/surface-registry/INDEX.md`
+for the registered set; this section does not restate either.
+
 ### The schema and rule files
 
 Operative contracts, one concern per file. The schema files define the shape of a thing
@@ -82,8 +92,8 @@ procedure or policy a maintainer must follow (`namespace-intake-rules.md`,
 `canon-changelog-rules.md`, `department-assembly-rules.md`,
 `department-runtime-contract.md`, `session-ledger-rules.md`, `tool-registry-rules.md`,
 `repo-registry-rules.md`, `secret-registry-rules.md`, `asset-registry-rules.md`,
-`wager-ledger-rules.md`, `multi-brain-workspace-contract.md`). Each names the
-`ai-architecture` doctrine node that explains why it exists.
+`wager-ledger-rules.md`, `multi-brain-workspace-contract.md`, `surface-contract-rules.md`). Each
+names the `ai-architecture` doctrine node that explains why it exists.
 
 ### The validator: `_system/validate.sh`
 
@@ -133,6 +143,10 @@ doctrine, so the validator and the rules never drift.
 - Building or revising the shared asset posture: read `asset-registry-rules.md`, keep durable
   references in the root `assets/` registry, and keep the actual image, video, or design-file
   bytes in the routed external backend, never in git.
+- Declaring or revising a surface: read `surface-contract-rules.md`, copy
+  `_system/surface-registry/_template.md` to a new file under `_system/surface-registry/`, fill
+  all nine declaration items from observed behavior rather than intent, and link it from the
+  owning department `INDEX.md` once one exists.
 - Upgrading a queued namespace to V2: read its audit packet, follow
   `migration-compatibility-rules.md` (additive moves, preserve edges and aliases), author
   canon per `canon-layer-schema.md`, flip `v2_status` to `upgraded`, run the validator.
